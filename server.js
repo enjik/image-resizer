@@ -1,24 +1,29 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
-const resize = require('/resize.js');
+const resize = require('./resize.js');
 
-//http://domain/{rawImagePath}/rawImageName
-app.get('/', function(err, callback) {
-  if (err) {
-
-  } else {
-
-  }
+// request raw image
+app.get('/raw', (req, res) => {
+  let path = req.query.path;
+  let image = req.query.imageName;
+  res.type(`image/${req.query.imageName.split('.')[1]}`);
+  res.send(fs.readFileSync(path + '/' + image));
 });
 
-//http://domain/{resizedImagePath}/resizedImageName
-app.get('/', function(err, callback) {
-  if (err) {
+// request resized image
+app.get('/resize', (req, res) => {
+  let format = req.query.format ? req.query.format : req.query.imageName.split('.')[1];
+  let width;
+  let height;
+  let path = req.query.path;
+  let image = req.query.imageName;
 
-  } else {
+  if (req.query.width) {
 
   }
+  res.type(`image/${format}`);
+  resize(path + '/' + image, width, height).pipe(res);
 });
 
 
