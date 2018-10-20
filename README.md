@@ -34,12 +34,12 @@ Resized images will be output to root/images/resized or the file path that is de
 
 ### GET request to the server to retrieve raw image from file system
 ```sh
-curl -H "Content-Type: application/json" -X GET http://localhost:3000/raw?path=images%2Foriginals&imageName=octocat.gif
-(Note: 'sample/images' is the path to the image location relative to the root directory -- a different path may be specified)
+curl -H "Content-Type: application/json" -X GET http://localhost:3000/raw?path=images/originals&imageName=octocat.gif
+(Note: 'images/originals' is the path to the image location relative to the root directory -- a different path may be specified)
 ```
 
 ### GET request to resize raw image and save to file system
 ```sh
-curl -H "Content-Type: application/json" -X GET http://localhost:3000/resize/images/resized?imageName=octocat.gif&width=300&height=300
+curl -H "Content-Type: application/json" -X GET http://localhost:3000/resize?path=images/resized&imageName=octocat.gif&width=300&height=300
 (Note: resized image will be stored at 'images/resized' relative to the root directory -- a different location may be specified)
 ```
