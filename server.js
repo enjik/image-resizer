@@ -2,32 +2,50 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const resize = require('./resize.js');
+const PORT = 3000;
 
-// request raw image
+// Request raw image
 app.get('/raw', (req, res) => {
-  let path = req.query.path;
-  let image = req.query.imageName;
-  res.type(`image/${req.query.imageName.split('.')[1]}`);
-  res.send(fs.readFileSync(path + '/' + image));
+  const path = req.query.path || 'images/originals';
+  const image = req.query.imageName;
+
+  // Check that original image exists
+  if (fs.existsSync(path + '/' + image)) {
+    // Set type of response
+    res.type(`image/${req.query.imageName.split('.')[1]}`);
+    // Send image
+    res.send(fs.readFileSync(path + '/' + image));
+  } else {
+    res.status(404).send('Could not find original image! Check image path to ensure it leads to existing image.');
+  }
 });
 
-// request resized image
+// Request resized image
 app.get('/resize', (req, res) => {
-  let format = req.query.format ? req.query.format : req.query.imageName.split('.')[1];
+  const image = req.query.imageName;
+  const format = req.query.format || req.query.imageName.split('.')[1];
+  const pathToWriteTo = req.query.path;
+  const pathToReadFrom = 'images/originals/' + image;
+
+  // Check that original image exists
+  if (!fs.existsSync(pathToReadFrom)) {
+    res.status(404).send('Could not find original image! Check image path to ensure it leads to existing image.');
+  }
+  // Parse width and height to integer
   let width;
   let height;
-  let path = req.query.path;
-  let image = req.query.imageName;
-
   if (req.query.width) {
-
+    width = parseInt(req.query.width);
   }
+  if (req.query.height) {
+    height = parseInt(req.query.height);
+  }
+  // Set type of response
   res.type(`image/${format}`);
-  resize(path + '/' + image, width, height).pipe(res);
+  // Get resized image
+  resize(pathToReadFrom, pathToWriteTo, image, width, height);
+  res.send('Resized image written to ' + pathToWriteTo + '/' + image);
 });
-
-
-const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`listening at ${PORT}!`);
