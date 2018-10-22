@@ -1,16 +1,32 @@
 const Jimp = require('jimp');
 const gifsicle = require('gifsicle');
 const { exec } = require('child_process');
+const mkdirp = require('mkdirp');
 
 const resize = function(pathToReadFrom, pathToWriteTo, image, format, width, height)  {
   if (format === 'gif') {
-    // GIF resizing and writing
-    exec(`gifsicle --resize ${width}x${height} -i ${pathToReadFrom} > ${pathToWriteTo}/${width}x${height}-${image}`, (err, stdout, stderr) => {
-      if (err) {
-        console.error(`exec error: ${err}`);
-        return;
-      }
+    // Make subdirectories as needed
+    mkdirp(pathToWriteTo, function (err) {
+      if (err) console.error(err);
     });
+    // GIF resizing and writing
+    width = width || '_';
+    height = height || '_';
+    if (width === '_' && height === '_') {
+      exec(`cp ${pathToReadFrom} ${pathToWriteTo}/${width}x${height}-${image}`, (err, stdout, stderr) => {
+        if (err) {
+          console.error(`exec error: ${err}`);
+          return;
+        }
+      });
+    } else {
+      exec(`gifsicle --resize ${width}x${height} -i ${pathToReadFrom} > ${pathToWriteTo}/${width}x${height}-${image}`, (err, stdout, stderr) => {
+        if (err) {
+          console.error(`exec error: ${err}`);
+          return;
+        }
+      });
+    }
   } else {
     // JPG or PNG resizing and writing
     Jimp.read(pathToReadFrom)
