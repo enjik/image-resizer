@@ -25,7 +25,7 @@ npm start
 ```
 ### Image Storage
 
-Original images should be stored in :root > images > originals.
+Original images should be stored in :root/images/originals.
 Resized images will be output to :root/images/resized if file path not specified.
 
 ## API
