@@ -1,7 +1,7 @@
 
 # Image Resizer Service
 
-> A service to retrieve and resize raw images from the file system. Compatible with jpg, png, or gif images.
+> A service to retrieve and resize raw images (jpg, png, or gif) from the file system. Utilizes the libraries jimp and gifsicle.
 
 ## Table of Contents
 
