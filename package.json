@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,14 @@
   },
   "homepage": "https://github.com/enjik/image-resizer#readme",
   "dependencies": {
-    "sharp": "^0.21.0"
+    "chai": "^4.2.0",
+    "chai-fs": "^2.0.0",
+    "chai-http": "^4.2.0",
+    "gifsicle": "^3.0.4",
+    "jimp": "^0.5.4",
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }
