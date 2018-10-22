@@ -35,15 +35,15 @@ Resized images will be output to :root/images/resized if file path not specified
 Template: http://{domain}/raw?path={originalImagePath}&imageName={originalImage.png/jpg/gif}
 ```
 ```sh
-curl -H "Content-Type: application/json" -X GET http://localhost:3000/raw?path=images/originals&imageName=octocat.gif
+Sample Command: curl -H "Content-Type: application/json" -X GET http://localhost:3000/raw?path=images/originals&imageName=octocat.gif
 ```
 _(Note: 'images/originals' is the path to the image location relative to the root directory -- if a path is not defined, the service will attempt to find the image by name in 'images/originals')_
 
 ### GET request to resize raw image and save to file system
 ```sh
-http://{domain}/resize?path={pathToWriteResizedImageTo}&imageName={originalImage.png/jpg/gif}&width={[int]}&height={[int]}
+Template: http://{domain}/resize?path={pathToWriteResizedImageTo}&imageName={originalImage.png/jpg/gif}&width={pxValue}&height={pxValue}
 ```
 ```sh
-curl -H "Content-Type: application/json" -X GET http://localhost:3000/resize?path=images/resized&imageName=octocat.gif&width=500&height=500
+Sample Command: curl -H "Content-Type: application/json" -X GET http://localhost:3000/resize?path=images/resized&imageName=octocat.gif&width=500&height=500
 ```
 _(Note: image to be resized must be stored in 'images/originals' or the service will not be able to locate it. Additionally, if a path is not defined for the resized image to be output to, 'images/resized' is the default location)_
