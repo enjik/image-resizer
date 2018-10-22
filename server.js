@@ -24,25 +24,28 @@ app.get('/raw', (req, res) => {
 app.get('/resize', (req, res) => {
   const image = req.query.imageName;
   const format = req.query.imageName.split('.')[1];
-  const pathToWriteTo = req.query.path;
+  const pathToWriteTo = req.query.path || 'images/resized';
   const pathToReadFrom = 'images/originals/' + image;
 
   // Check that original image exists
   if (!fs.existsSync(pathToReadFrom)) {
     res.status(404).send('Could not find original image! Check image path to ensure it leads to existing image.');
+  } else {
+    // Parse width and height to integer
+    let width;
+    let height;
+    width = req.query.width ? parseInt(req.query.width) : undefined;
+    height = req.query.height? parseInt(req.query.height) : undefined;
+    // Set type of response
+    res.type('text/html');
+    // Write resized image to file system
+    resize(pathToReadFrom, pathToWriteTo, image, format, width, height);
+    res.send(`Image resized and written to ${pathToWriteTo}/${width}x${height}-${image}`);
   }
-  // Parse width and height to integer
-  let width;
-  let height;
-  width = req.query.width ? parseInt(req.query.width) : '_';
-  height = req.query.height? parseInt(req.query.height) : '_';
-  // Set type of response
-  res.type('text/html');
-  // Write resized image to file system
-  resize(pathToReadFrom, pathToWriteTo, image, format, width, height);
-  res.send(`Image resized and written to ${pathToWriteTo}/${width}x${height}-${image}`);
 });
 
 app.listen(PORT, () => {
   console.log(`listening at ${PORT}!`);
 });
+
+module.exports = app;
