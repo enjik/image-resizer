@@ -23,7 +23,7 @@ app.get('/raw', (req, res) => {
 // Request resized image
 app.get('/resize', (req, res) => {
   const image = req.query.imageName;
-  const format = req.query.format || req.query.imageName.split('.')[1];
+  const format = req.query.imageName.split('.')[1];
   const pathToWriteTo = req.query.path;
   const pathToReadFrom = 'images/originals/' + image;
 
@@ -34,17 +34,13 @@ app.get('/resize', (req, res) => {
   // Parse width and height to integer
   let width;
   let height;
-  if (req.query.width) {
-    width = parseInt(req.query.width);
-  }
-  if (req.query.height) {
-    height = parseInt(req.query.height);
-  }
+  width = req.query.width ? parseInt(req.query.width) : '_';
+  height = req.query.height? parseInt(req.query.height) : '_';
   // Set type of response
-  res.type(`image/${format}`);
-  // Get resized image
-  resize(pathToReadFrom, pathToWriteTo, image, width, height);
-  res.send('Resized image written to ' + pathToWriteTo + '/' + image);
+  res.type('text/html');
+  // Write resized image to file system
+  resize(pathToReadFrom, pathToWriteTo, image, format, width, height);
+  res.send(`Image resized and written to ${pathToWriteTo}/${width}x${height}-${image}`);
 });
 
 app.listen(PORT, () => {
